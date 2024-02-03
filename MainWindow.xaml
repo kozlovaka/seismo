@@ -1,0 +1,166 @@
+﻿<Window x:Class="SilencePauseApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SilencePauseApp" xmlns:viewmodel="clr-namespace:SilencePauseApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.DataVisualization.Toolkit"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">
+    <Grid>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Данные" FontSize="14"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="75"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Поиск" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
+                            <TextBox Text="{Binding Find, UpdateSourceTrigger=PropertyChanged}" Margin="5" FontSize="14" Grid.Column="1"/>
+                        </Grid>
+                        
+                        
+                        <DataGrid ItemsSource="{Binding FindPauses, UpdateSourceTrigger=PropertyChanged}" SelectedValue="{Binding SelectPauses}" Grid.Row="1" IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Дата события" Binding="{Binding DateEvent}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Часы" Binding="{Binding Hour}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Минуты" Binding="{Binding Min}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Секунды" Binding="{Binding Sec}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Широта" Binding="{Binding Latitude}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Долгота" Binding="{Binding Longitude}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Глубина" Binding="{Binding Depth}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="d_Dep" Binding="{Binding DDep}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Ms" Binding="{Binding Ms}" FontSize="14" Width="*"/>
+                                <DataGridTextColumn Header="Kl" Binding="{Binding Kl}" FontSize="14" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Content="Добавить" Command="{Binding AddCommand}" FontSize="14" Grid.Column="0" Margin="5"/>
+                            <Button Content="Обновить" Command="{Binding UpdateCommand}" FontSize="14" Grid.Column="1" Margin="5"/>
+                            <Button Content="Удалить" Command="{Binding RemoveCommand}" FontSize="14" Grid.Column="2" Margin="5"/>
+                        </Grid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="График" FontSize="14"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <TabControl>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="Визуализация" FontSize="14"/>
+                            </TabItem.Header>
+                            <TabItem.Content>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="300"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="280"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <GroupBox Header="График" FontSize="14" Grid.RowSpan="2" Grid.Column="0" BorderBrush="Black">
+                                        <Grid>
+                                            <chartingToolkit:Chart Grid.Column="1" Margin="0" Title="ПАУЗЫ МОЛЧАНИЯ ПЕРЕД СИЛЬНЫМИ ЗЕМЛЕТРЯСЕНИЯМИ БАЙКАЛЬСКОГО РЕГИОНА" DataContext="{Binding Grafs}">
+                                                <chartingToolkit:LineSeries ItemsSource="{Binding}" 
+                                                    DependentValuePath="Y"
+                                                    IndependentValuePath="X"
+                                                    Title="График пауз"/>
+                                            </chartingToolkit:Chart>
+                                            
+                                        </Grid>
+                                    </GroupBox>
+
+
+                                    <GroupBox Header="Входные параметры" FontSize="14" Grid.Column="1" BorderBrush="Black">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="35"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Content="Период от: " Grid.Row="0" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Период до: " Grid.Row="1" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Магнитуда от: " Grid.Row="2" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Магнитуда до: " Grid.Row="3" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Шаг обхода: " Grid.Row="4" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Окно обхода: " Grid.Row="5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <Label Content="Кол. событий: " Grid.Row="6" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <!--<Label Content="Магнитуда: " Grid.Row="6" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
+
+                                            <TextBox Text="{Binding DateStart, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}" Grid.Row="0" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding DateEnd, UpdateSourceTrigger=PropertyChanged, StringFormat=dd.MM.yyyy}" Grid.Row="1" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding MagnitudeStart, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}" Grid.Row="2" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding MagnitudeEnd, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}" Grid.Row="3" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding Step, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding EventWindow, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding EventCount, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>
+                                            <!--<TextBox Text="{Binding Magnitude, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" FontSize="14" Margin="5" VerticalAlignment="Center"/>-->
+                                        </Grid>
+                                    </GroupBox>
+                                </Grid>
+                            </TabItem.Content>
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="Данные для визуализации"/>
+                            </TabItem.Header>
+                            <TabItem.Content>
+                                <Grid>
+                                    <DataGrid ItemsSource="{Binding DataFromGraf, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" IsReadOnly="True" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Дата события" Binding="{Binding DateEvent}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Часы" Binding="{Binding Hour}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Минуты" Binding="{Binding Min}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Секунды" Binding="{Binding Sec}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Широта" Binding="{Binding Latitude}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Долгота" Binding="{Binding Longitude}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Глубина" Binding="{Binding Depth}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="d_Dep" Binding="{Binding DDep}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Ms" Binding="{Binding Ms}" FontSize="14" Width="*"/>
+                                            <DataGridTextColumn Header="Kl" Binding="{Binding Kl}" FontSize="14" Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </TabItem.Content>
+                        </TabItem>
+                    </TabControl>
+                    
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
